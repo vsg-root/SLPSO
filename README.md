@@ -6,8 +6,6 @@ SLPso is a Python library that implements the Social Learning Particle Swarm Opt
 
 ## About the Algorithm
 
-SLPso is a Python library that implements the Social Learning Particle Swarm Optimization (SL-PSO) algorithm, which is based on the following research paper:
-
 **A Social Learning Particle Swarm Optimization Algorithm for Scalable Optimization**
 *Authors: Ran Cheng and Yaochu Jin*
 *Journal: Information Sciences, Volume 291, Pages 43-60, Year 2015*
