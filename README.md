@@ -1,6 +1,9 @@
 # SLPso - Social Learning Particle Swarm Optimization
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+![Python 3.8.16](https://img.shields.io/badge/Python-3.8.16-blue)
+
+
 
 SLPso is a Python library that implements the Social Learning Particle Swarm Optimization (SL-PSO) algorithm for scalable optimization problems, as described in the following article:
 
@@ -12,7 +15,16 @@ SLPso is a Python library that implements the Social Learning Particle Swarm Opt
 *DOI: [10.1016/j.ins.2014.08.039](https://doi.org/10.1016/j.ins.2014.08.039)*
 *URL to the Paper: [Read the full paper](https://www.sciencedirect.com/science/article/pii/S0020025514008366)*
 
-If you use the SLPso library in your work, please consider citing the original research paper to acknowledge the authors' contributions.
+If you use the SLPso library in your research, please consider citing this library.
+
+<details>
+<summary>Reveal quote</summary>
+
+**SLPso - Social Learning Particle Swarm Optimization** [Software]. (2023).  Available at: [https://github.com/vsg-root/slpso](https://github.com/vsg-root/slpso).
+
+</details>
+
+
 
 ## About SL-PSO
 
@@ -24,6 +36,33 @@ To get started with SLPso, you can install it via pip:
 
 ```bash
 pip install slpso
+```
+### Try your first SL-PSO program
+
+```python
+>>> from slpso.slpso import SLPSO
+>>> import numpy as np
+
+>>> def custom_objective_function (positions: np.ndarray) -> np.ndarray: # Fitness Function 
+    """
+    Example objective function to be minimized.
+
+    Parameters:
+    - positions: Particle positions.
+
+    Returns:
+    - Array of objective function values for each particle.
+    """
+>>> return np.sum(positions ** 2, axis=1)
+
+# Define a desired random seed to control randomness
+>>> random_seed = 40  # None
+
+>>> slpso_optimizer = SLPSO(custom_objective_function, random_seed=random_seed)
+>>> global_best_position, global_best_value = slpso_optimizer.optimize()
+
+>>> print("Global Best Position:", global_best_position)
+>>> print("Global Best Value:", global_best_value)
 ```
 
 
