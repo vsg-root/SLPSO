@@ -30,12 +30,21 @@ If you use the SLPso library in your research, please consider citing this libra
 
 The Social Learning Particle Swarm Optimization is a population-based optimization algorithm inspired by the behavior of a swarm of particles. It leverages social interactions to enhance exploration of the search space and convergence to optimal solutions in scalable optimization problems.
 
+<div align="center">
+
 #### **Restrigin** Function
 ![Texto Alternativo](assets/restrigin_2d_plot.png)
 ![Texto Alternativo](assets/restrigin_3d_plot.png)
+
+</div>
+
+<div align="center">
+
 #### **Ackley** Function
 ![Texto Alternativo](assets/ackley_2d_plot.png)
 ![Texto Alternativo](assets/ackley_3d_plot.png)
+</div>
+
 ## Installation
 
 To get started with SLPso, you can install it via pip:
