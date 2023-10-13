@@ -34,6 +34,44 @@ The Social Learning Particle Swarm Optimization is a population-based optimizati
 ## Important Note
 
 It is crucial to highlight that **this library's performance did not match the results reported in the referenced paper.** The following results were obtained through extensive experiments, each run 30 times for different dimensions, with 100 particles, and a total of 200,000 fitness evaluations for each experiment.
+#### - **Restrigin** Function
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <img src="assets/restrigin_2d_plot.png" alt="Texto Alternativo 1">
+      </td>
+      <td align="center">
+        <img src="assets/restrigin_3d_plot.png" alt "Texto Alternativo 2">
+      </td>
+    </tr>
+    <tr>
+      <td align="center"></td>
+      <td align="center"></td>
+    </tr>
+  </table>
+</div>
+
+#### - **Ackley** Function
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <img src="assets/ackley_2d_plot.png" alt="Texto Alternativo 1">
+      </td>
+      <td align="center">
+        <img src="assets/ackley_3d_plot.png" alt "Texto Alternativo 2">
+      </td>
+    </tr>
+    <tr>
+      <td align="center"></td>
+      <td align="center"></td>
+    </tr>
+  </table>
+</div>
+
 
 ## Installation
 
