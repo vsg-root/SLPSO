@@ -30,20 +30,45 @@ If you use the SLPso library in your research, please consider citing this libra
 
 The Social Learning Particle Swarm Optimization is a population-based optimization algorithm inspired by the behavior of a swarm of particles. It leverages social interactions to enhance exploration of the search space and convergence to optimal solutions in scalable optimization problems.
 
-<div align="center">
-
-#### **Restrigin** Function
-![Texto Alternativo](assets/restrigin_2d_plot.png)
-![Texto Alternativo](assets/restrigin_3d_plot.png)
-
-</div>
+#### - **Restrigin** Function
 
 <div align="center">
-
-#### **Ackley** Function
-![Texto Alternativo](assets/ackley_2d_plot.png)
-![Texto Alternativo](assets/ackley_3d_plot.png)
+  <table>
+    <tr>
+      <td align="center">
+        <img src="assets/restrigin_2d_plot.png" alt="Texto Alternativo 1">
+      </td>
+      <td align="center">
+        <img src="assets/restrigin_3d_plot.png" alt "Texto Alternativo 2">
+      </td>
+    </tr>
+    <tr>
+      <td align="center">Imagem 1</td>
+      <td align="center">Imagem 2</td>
+    </tr>
+  </table>
 </div>
+
+#### - **Ackley** Function
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center">
+        <img src="assets/ackley_2d_plot.png" alt="Texto Alternativo 1">
+      </td>
+      <td align="center">
+        <img src="assets/ackley_3d_plot.png" alt "Texto Alternativo 2">
+      </td>
+    </tr>
+    <tr>
+      <td align="center">Imagem 1</td>
+      <td align="center">Imagem 2</td>
+    </tr>
+  </table>
+</div>
+
+
 
 ## Installation
 
@@ -55,27 +80,34 @@ pip install slpso
 ### Try your first SL-PSO program
 
 ```python
->>> from slpso.slpso import SLPSO
 >>> import numpy as np
+>>> from slpso.slpso import SLPSO
 
->>> def custom_objective_function (positions: np.ndarray) -> np.ndarray: # Fitness Function 
+>>> def custom_objective_function(positions: np.ndarray) -> np.ndarray:
     """
-    Example objective function to be minimized.
+    The custom objective function to be minimized.
 
-    Parameters:
-    - positions: Particle positions.
+    Args:
+        positions (np.ndarray): An array of particle positions.
 
     Returns:
-    - Array of objective function values for each particle.
+        np.ndarray: An array of fitness values.
     """
 >>> return np.sum(positions ** 2, axis=1)
 
-# Define a desired random seed to control randomness
->>> random_seed = 40  # None
+>>> # Create a custom random number generator
+>>> rng = np.random.default_rng(seed=50)  # Replace 40 with the desired seed
 
->>> slpso_optimizer = SLPSO(custom_objective_function, random_seed=random_seed)
+>>> lower_bound = -5.0  # Set the lower bound
+>>> upper_bound = 5.0   # Set the upper bound
+
+>>> slpso_optimizer = SLPSO(custom_objective_function, 
+                            rng=rng, 
+                            lower_bound=lower_bound, 
+                            upper_bound=upper_bound, 
+                            show_progress=False)
+
 >>> global_best_position, global_best_value = slpso_optimizer.optimize()
-
 >>> print("Global Best Position:", global_best_position)
 >>> print("Global Best Value:", global_best_value)
 ```
