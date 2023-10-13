@@ -78,7 +78,7 @@ It is crucial to highlight that **this library's performance did not match the r
 To get started with SLPso, you can install it via pip:
 
 ```bash
-pip install git+https://github.com/vsg-root/slpso.git
+pip install slpso
 ```
 ### Try your first SL-PSO program
 
