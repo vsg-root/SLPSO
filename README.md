@@ -100,6 +100,7 @@ pip install slpso
 
 >>> slpso_optimizer = SLPSO(custom_objective_function, seed=1,
                         lower_bound=lower_bound, upper_bound=upper_bound, show_progress=False)
+
 >>> global_best_position, global_best_value = slpso_optimizer.optimize()
 >>> print("Global Best Position:", global_best_position)
 >>> print("Global Best Value:", global_best_value)
