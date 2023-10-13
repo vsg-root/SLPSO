@@ -93,7 +93,7 @@ pip install slpso
     Returns:
         np.ndarray: An array of fitness values.
     """
->>> return np.sum(positions ** 2, axis=1)
+>>>     return np.sum(positions ** 2, axis=1)
 
 >>> lower_bound = -30.0  # Set the lower bound
 >>> upper_bound = 30.0   # Set the upper bound
