@@ -95,18 +95,11 @@ pip install slpso
     """
 >>> return np.sum(positions ** 2, axis=1)
 
->>> # Create a custom random number generator
->>> rng = np.random.default_rng(seed=50)  # Replace 40 with the desired seed
+>>> lower_bound = -30.0  # Set the lower bound
+>>> upper_bound = 30.0   # Set the upper bound
 
->>> lower_bound = -5.0  # Set the lower bound
->>> upper_bound = 5.0   # Set the upper bound
-
->>> slpso_optimizer = SLPSO(custom_objective_function, 
-                            rng=rng, 
-                            lower_bound=lower_bound, 
-                            upper_bound=upper_bound, 
-                            show_progress=False)
-
+>>> slpso_optimizer = SLPSO(custom_objective_function, seed=1,
+                        lower_bound=lower_bound, upper_bound=upper_bound, show_progress=False)
 >>> global_best_position, global_best_value = slpso_optimizer.optimize()
 >>> print("Global Best Position:", global_best_position)
 >>> print("Global Best Value:", global_best_value)
