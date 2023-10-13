@@ -105,7 +105,7 @@ class SLPSO(PsoAlgorithm):
         Returns:
             Tuple[np.ndarray, float]: A tuple containing the global best position and its value.
         """
-        count = 0
+        count = self.m
 
         while count < self.max_iterations:
             sort_swarm_index = np.argsort(self.fitness_values)
