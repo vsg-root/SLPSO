@@ -35,13 +35,18 @@ The Social Learning Particle Swarm Optimization is a population-based optimizati
 
 It is crucial to highlight that **this library's performance did not match the results reported in the referenced paper.** The following results were obtained through extensive experiments, each run 30 times for different dimensions, with 100 particles, and a total of 200,000 fitness evaluations for each experiment.
 
+## Status
+
+**SLPso** has not been published on PyPI yet. The library is currently under active development and is available directly in the GitHub repository. You can install it using `pip` directly from GitHub, as shown in the installation instructions below.
+
+
 
 ## Installation
 
 To get started with SLPso, you can install it via pip:
 
 ```bash
-pip install slpso
+pip install git+https://github.com/vsg-root/slpso.git
 ```
 ### Try your first SL-PSO program
 
