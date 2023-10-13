@@ -98,8 +98,11 @@ pip install slpso
 >>> lower_bound = -30.0  # Set the lower bound
 >>> upper_bound = 30.0   # Set the upper bound
 
->>> slpso_optimizer = SLPSO(custom_objective_function, seed=1,
-                        lower_bound=lower_bound, upper_bound=upper_bound, show_progress=False)
+>>> slpso_optimizer = SLPSO(custom_objective_function,
+                            seed=1,
+                            lower_bound=lower_bound,
+                            upper_bound=upper_bound,
+                            show_progress=False)
 
 >>> global_best_position, global_best_value = slpso_optimizer.optimize()
 >>> print("Global Best Position:", global_best_position)
