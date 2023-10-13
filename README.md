@@ -43,8 +43,8 @@ The Social Learning Particle Swarm Optimization is a population-based optimizati
       </td>
     </tr>
     <tr>
-      <td align="center">Imagem 1</td>
-      <td align="center">Imagem 2</td>
+      <td align="center"></td>
+      <td align="center"></td>
     </tr>
   </table>
 </div>
@@ -62,8 +62,8 @@ The Social Learning Particle Swarm Optimization is a population-based optimizati
       </td>
     </tr>
     <tr>
-      <td align="center">Imagem 1</td>
-      <td align="center">Imagem 2</td>
+      <td align="center"></td>
+      <td align="center"></td>
     </tr>
   </table>
 </div>
