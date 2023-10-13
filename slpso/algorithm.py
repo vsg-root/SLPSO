@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Tuple
 
-class PsoAlgorithm(ABC):
+class Algorithm(ABC):
     """
     Abstract base class for Particle Swarm Optimization (PSO) algorithms.
     """
