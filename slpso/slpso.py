@@ -1,11 +1,17 @@
-from typing import Callable, Optional, Tuple
-from .algorithm import PsoAlgorithm
+"""Social Learning PSO optimizer.
+
+Reference
+---------
+
+"""
+from typing import Callable, Tuple
+from .algorithm import Algorithm
 import numpy as np
 
 
-class SLPSO(PsoAlgorithm):
+class SLPSO(Algorithm):
     def __init__(self,
-                 objective_function: Callable,
+                 fn: Callable,
                  M: int = 100,
                  alpha: float = 0.5,
                  beta: float = 0.01,
@@ -14,13 +20,12 @@ class SLPSO(PsoAlgorithm):
                  show_progress: bool = True,
                  seed: int = 42,
                  lower_bound: float = -1.0,
-                 upper_bound: float = 1.0
-                 ):
+                 upper_bound: float = 1.0):
         """
         Initialize the SLPSO optimizer.
 
         Args:
-            objective_function (Callable): The objective function to be minimized.
+            fn (Callable): The objective function to be minimized.
             M (int, optional): The number of particles in the swarm. Default is 100.
             alpha (float, optional): A constant used in learning probability calculation. Default is 0.5.
             beta (float, optional): A constant used in epsilon calculation. Default is 0.01.
@@ -35,10 +40,10 @@ class SLPSO(PsoAlgorithm):
         self.alpha = alpha
         self.beta = beta
         self.n = n
-        self.m = int(M + np.floor(n / 10))
-        self.epsilon = beta * n / M
-        self.max_iterations = max_fn
-        self.objective_function = objective_function
+        self.m = M + int(np.floor(n / 10))
+        self.epsilon = beta * (n / M)
+        self.max_evaluations = max_fn
+        self.fn = fn
         self.show_progress = show_progress
         self.rng = np.random.default_rng(seed)
         self.lower_bound = lower_bound
@@ -53,14 +58,13 @@ class SLPSO(PsoAlgorithm):
         self.positions = self.rng.uniform(self.lower_bound,
                                           self.upper_bound,
                                           size=(self.m, self.n))
-        self.fitness_values = self.objective_function(self.positions)
+        self.fitness_values = self.fn(self.positions)
         self.global_best_index = np.argmin(self.fitness_values)
         self.global_best_position = self.positions[self.global_best_index]
         self.global_best_value = self.fitness_values[self.global_best_index]
         self.previous_deltas = np.zeros((self.m, self.n))
 
-    def learning_probability(self,
-                             indices: np.ndarray) -> np.ndarray:
+    def learning_probability(self, indices: np.ndarray) -> np.ndarray:
         """
         Calculate the learning probability for each particle.
 
@@ -70,7 +74,8 @@ class SLPSO(PsoAlgorithm):
         Returns:
             np.ndarray: An array of learning probabilities.
         """
-        power = self.alpha - np.log10(np.ceil(self.n / self.M))
+        ceil = np.ceil(self.n / self.M)
+        power = self.alpha * np.log10(ceil)
         div = indices / self.m
         return (1 - div) ** power
 
@@ -105,48 +110,70 @@ class SLPSO(PsoAlgorithm):
         Returns:
             Tuple[np.ndarray, float]: A tuple containing the global best position and its value.
         """
-        count = self.m
+        n_evaluations = self.m
 
-        while count < self.max_iterations:
-            sort_swarm_index = np.argsort(self.fitness_values)[::-1]
-            self.fitness_values = self.fitness_values[sort_swarm_index]
-            self.positions = self.positions[sort_swarm_index]
-            self.previous_deltas = self.previous_deltas[sort_swarm_index]
+        # Obtain learning probabilities for each individual
+        learning_probabilities = self.learning_probability(np.arange(self.m))
 
+        # Dimensions indices
+        dimensions_indices = np.arange(self.n)
+
+        while n_evaluations < self.max_evaluations:
+            # Swarm sorting from worst (idx 0) to best (idx -1)
+            #   We assume a minimization problem
+            sort_indices = np.argsort(self.fitness_values)[::-1]
+            self.fitness_values = self.fitness_values[sort_indices]
+            self.positions = self.positions[sort_indices]
+            self.previous_deltas = self.previous_deltas[sort_indices]
+
+            # Generate random r-values for this iteration
             r1, r2, r3 = self.rng.random(), self.rng.random(), self.rng.random()
-            probabilities = self.learning_probability(np.arange(self.m))
 
-            # Use the RNG for generating demonstrators
-            demonstrators = np.zeros((self.m, self.n))
+            # Initialize with random demonstrators
+            demonstrators = self.positions.copy()
 
+            # Use RNG for demonstrator selection in each dimension
             for i in range(self.m - 1):
-                # Use RNG for demonstrator selection
-                demonstrator_index = self.rng.integers(i + 1, self.m)
-                demonstrators[i] = self.positions[demonstrator_index]
+                demonstrator_indices = self.rng.integers(i + 1,
+                                                         self.m,
+                                                         size=(self.n,))
+                demonstrators[i] = self.positions[demonstrator_indices,
+                                                  dimensions_indices]
 
+            # Create a mask for each particle
+            mask = self.rng.random(size=self.m) <= learning_probabilities
+            mask[-1] = False
+
+            # Obtain the average position of each dimension
             mean_positions = np.mean(self.positions, axis=0)
+
+            # Obtain the delta according (4), (5) and (6)
             deltas = self.delta_x(r1, r2, r3, mean_positions, demonstrators)
-            self.previous_deltas = deltas
 
-            mask = self.rng.random(size=self.m) < probabilities
-
-            self.positions += mask[:, np.newaxis] * deltas
+            # Update positions
+            self.positions = self.positions + mask[:, np.newaxis] * deltas
             self.positions = np.clip(self.positions,
                                      self.lower_bound,
                                      self.upper_bound)
-            self.positions[-1] = self.global_best_position
 
-            self.fitness_values = self.objective_function(self.positions)
-            count += self.m
+            # Update values of previous deltas to new ones
+            self.previous_deltas[mask] = deltas[mask]
+
+            # Obtain new fitness values
+            self.fitness_values = self.fn(self.positions)
+            n_evaluations += self.m
+
+            # Obtain the index of the best particle
             best_idx = np.argmin(self.fitness_values)
 
+            # Update best known position
             if self.fitness_values[best_idx] < self.global_best_value:
                 self.global_best_value = self.fitness_values[best_idx]
                 self.global_best_position = self.positions[best_idx]
                 self.global_best_index = best_idx
 
             if self.show_progress:
-                print(f"Iteration {count + 1}: "
+                print(f"Iteration {n_evaluations + 1}: "
                       f"Global Best Value = {self.global_best_value}")
 
         if self.show_progress:
@@ -154,29 +181,3 @@ class SLPSO(PsoAlgorithm):
             print("Global Best Value:", self.global_best_value)
 
         return self.global_best_position, self.global_best_value
-
-
-if __name__ == "__main__":
-    def custom_objective_function(positions: np.ndarray) -> np.ndarray:
-        """
-        The custom objective function to be minimized.
-
-        Args:
-            positions (np.ndarray): An array of particle positions.
-
-        Returns:
-            np.ndarray: An array of fitness values.
-        """
-        return np.sum(positions ** 2, axis=1)
-
-    # Create a custom random number generator
-    rng = np.random.default_rng(seed=50)  # Replace 40 with the desired seed
-
-    lower_bound = -5.0  # Set the lower bound
-    upper_bound = 5.0   # Set the upper bound
-
-    slpso_optimizer = SLPSO(custom_objective_function, rng=rng,
-                            lower_bound=lower_bound, upper_bound=upper_bound, show_progress=False)
-    global_best_position, global_best_value = slpso_optimizer.optimize()
-    print("Global Best Position:", global_best_position)
-    print("Global Best Value:", global_best_value)
