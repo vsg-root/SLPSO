@@ -1,6 +1,7 @@
 """Social Learning PSO optimizer.
 
 Reference
+A Social Learning Particle Swarm Optimization Algorithm for Scalable Optimization Authors: Ran Cheng and Yaochu Jin Journal: Information Sciences, Volume 291, Pages 43-60, Year 2015 DOI: 10.1016/j.ins.2014.08.039
 ---------
 
 """
